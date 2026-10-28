@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8f9ff">
+<meta name="description" content="TriDL — a modern video link tool for content you own or have permission to save.">
+<title>TriDL — Your videos, your space</title>
+<style>
+:root{--bg:#f8f9ff;--surface:#fff;--ink:#17172b;--muted:#74768d;--line:#e9eaf3;--soft:#f3f4fb;--pink:#ff416c;--purple:#7657f6;--blue:#5b7cfa;--green:#1caa78;--shadow:0 22px 70px #29356b12}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;z-index:-1;pointer-events:none;top:-180px;left:calc(50% - 390px);width:780px;height:420px;border-radius:50%;background:linear-gradient(120deg,#ffcfdf,#e8e0ff,#dff8ff);filter:blur(75px);opacity:.7}
+a{color:inherit}
+header{max-width:1120px;margin:auto;padding:20px 26px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:27px;font-weight:950;letter-spacing:-1.4px}
+.mark{width:40px;height:40px;border-radius:14px;background:linear-gradient(140deg,var(--pink),var(--purple));display:grid;place-items:center;color:#fff;box-shadow:0 7px 20px #7657f638;font-size:22px}
+.brand .dl{color:var(--purple)}
+.nav{display:flex;align-items:center;gap:7px}
+.nav a,.theme{padding:10px 13px;border-radius:12px;text-decoration:none;color:var(--muted);font-size:13px;font-weight:750;border:1px solid transparent;background:transparent;cursor:pointer}
+.nav a:hover,.theme:hover{background:#fff;border-color:var(--line);color:var(--ink)}
+main{max-width:1050px;margin:auto;padding:20px 22px 70px}
+.hero{text-align:center;padding:45px 0 14px}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border:1px solid #7657f628;border-radius:999px;background:#fff9;color:#6848e8;font-size:11px;font-weight:850;letter-spacing:1.2px}
+.spark{width:7px;height:7px;border-radius:50%;background:#28c58c;box-shadow:0 0 0 4px #28c58c20}
+h1{font-size:clamp(43px,7.5vw,78px);line-height:1.02;letter-spacing:-4.8px;margin:24px auto 17px;max-width:850px;font-weight:950}
+.gradient{background:linear-gradient(95deg,#ff416c 10%,#a04af3 54%,#5479ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{max-width:570px;margin:0 auto;color:var(--muted);font-size:17px;line-height:1.75}
+.platforms{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:23px 0 0}
+.platform.logo-only{width:76px;height:64px;justify-content:center;padding:0;background:#fff;border:1px solid var(--line);box-shadow:0 7px 22px #29356b0b;border-radius:17px}
+.brand-logo{display:block;overflow:visible}
+.youtube-logo{width:35px;height:25px}
+.instagram-logo,.tiktok-logo{width:31px;height:31px}
+
+.platform{display:flex;align-items:center;gap:8px;padding:9px 13px;border:1px solid var(--line);border-radius:12px;background:#ffffffc9;box-shadow:0 4px 15px #242b5005;font-size:12px;font-weight:800}
+.platform .dot{width:25px;height:25px;border-radius:8px;display:grid;place-items:center;color:white;font-size:13px}
+.yt{background:#ff334c}.ig{background:linear-gradient(140deg,#ffb347,#f44387,#8759f7)}.tt{background:#17172b}
+.panel-wrap{max-width:760px;margin:34px auto 0;padding:1px;border-radius:28px;background:linear-gradient(125deg,#ff9cb5,#b7a5ff,#a7e9fa);box-shadow:0 24px 75px #5b4c9c16}
+.panel{background:#ffffffed;backdrop-filter:blur(20px);border:1px solid #fff;border-radius:27px;padding:26px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}
+.panel-title{font-size:17px;font-weight:900;letter-spacing:-.3px}
+.safe{font-size:11px;font-weight:800;color:var(--green);display:flex;align-items:center;gap:6px}
+.safe:before{content:"";width:7px;height:7px;background:var(--green);border-radius:50%}
+.form-row{display:flex;gap:10px}
+.inputbox{position:relative;flex:1;min-width:0}
+.inputbox span{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:19px;color:#a0a1b7}
+input{width:100%;height:62px;border:1px solid #e4e5ef;border-radius:15px;background:#fafaff;color:var(--ink);padding:0 15px 0 47px;font-size:14px;outline:none;min-width:0}
+input::placeholder{color:#9a9bb0}
+input:focus{border-color:#947bf9;box-shadow:0 0 0 4px #7657f615}
+.paste{width:67px;border:1px solid #e4e5ef;border-radius:15px;background:#fff;color:#5e50ca;font-size:12px;font-weight:900;cursor:pointer}
+.paste:hover{background:#f4f0ff}
+.submit{width:100%;height:62px;margin-top:12px;border:0;border-radius:15px;color:white;font-size:15px;font-weight:900;letter-spacing:.1px;background:linear-gradient(100deg,#ff416c,#e34b9e 48%,#7657f6);box-shadow:0 10px 25px #e94c8d28;cursor:pointer;position:relative;overflow:hidden}
+.submit:hover{filter:saturate(1.12);transform:translateY(-1px);box-shadow:0 14px 30px #e94c8d35}
+.submit:active{transform:scale(.99)}
+.minirow{display:flex;justify-content:space-between;gap:12px;margin-top:14px;color:var(--muted);font-size:11px}
+#status{display:none;margin-top:15px;padding:14px;border-radius:13px;border:1px solid #e8e5fa;background:#f8f6ff;color:#5c5c78;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+.section-heading{text-align:center;margin:65px 0 22px}
+.section-heading h2{font-size:27px;letter-spacing:-1px;margin:0 0 8px}
+.section-heading p{color:var(--muted);font-size:14px;margin:0}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;max-width:850px;margin:auto}
+.feature{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 10px 35px #29356b06}
+.ficon{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:#f3efff;color:#7457ed;font-size:21px;margin-bottom:17px}
+.feature:nth-child(2) .ficon{background:#fff0f4;color:#f34370}.feature:nth-child(3) .ficon{background:#eafaf4;color:#15976c}
+.feature h3{font-size:14px;margin:0 0 8px}.feature p{font-size:12px;color:var(--muted);line-height:1.7;margin:0}
+.steps{max-width:850px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.step{display:flex;align-items:flex-start;gap:12px;padding:16px;border-radius:16px;background:#fff;border:1px solid var(--line)}
+.num{width:28px;height:28px;flex-shrink:0;display:grid;place-items:center;border-radius:9px;background:#f0edff;color:#6f51eb;font-size:12px;font-weight:900}
+.step strong{font-size:12px;display:block;margin:2px 0 5px}.step span{font-size:11px;line-height:1.5;color:var(--muted)}
+.ad{max-width:850px;margin:36px auto 0;border:1px dashed #dfe0ed;border-radius:15px;height:72px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;color:#a2a4b8;font-size:9px;letter-spacing:1.6px}.ad b{font-size:12px;letter-spacing:0;font-weight:600}
+.notice{max-width:700px;margin:27px auto 0;text-align:center;color:var(--muted);font-size:11px;line-height:1.8}
+footer{border-top:1px solid var(--line);padding:24px 20px;display:flex;justify-content:center;gap:6px;flex-wrap:wrap;color:var(--muted);font-size:12px}footer strong{color:var(--ink)}
+@media(max-width:650px){header{padding:16px 18px}.brand{font-size:24px}.nav a{display:none}main{padding:12px 15px 50px}.hero{padding:35px 0 8px}h1{letter-spacing:-2.8px;margin-top:22px}.sub{font-size:15px}.panel-wrap{margin-top:28px;border-radius:23px}.panel{padding:18px 13px;border-radius:22px}.form-row{gap:7px}input{font-size:12px;padding-left:40px}.inputbox span{left:13px}.paste{width:57px}.minirow{font-size:9px}.features,.steps{grid-template-columns:1fr;gap:10px}.feature{display:flex;gap:14px;padding:16px}.ficon{flex-shrink:0;margin:0}.section-heading{margin-top:47px}.section-heading h2{font-size:24px}.step{padding:13px}.platform{padding:8px 10px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="#" aria-label="TriDL home"><span class="mark">↧</span><span>Tri<span class="dl">DL</span></span></a>
+  <nav class="nav"><a href="#features">Features</a><a href="#how">How it works</a><button class="theme" id="themeBtn" type="button">☾ Dark mode</button></nav>
+</header>
+<main>
+  <section class="hero">
+    <div class="badge"><span class="spark"></span> THE SIMPLE VIDEO TOOL</div>
+    <h1>Your favourite videos.<br><span class="gradient">All in one place.</span></h1>
+    <p class="sub">A clean, quick way to work with video links. Paste your link and get started — no clutter, no confusing layout.</p>
+    <div class="platforms" aria-label="Supported platforms">
+      <span class="platform logo-only" aria-label="YouTube" title="YouTube">
+        <svg class="brand-logo youtube-logo" viewBox="0 0 28 20" role="img" aria-label="YouTube logo"><rect x="1" y="1" width="26" height="18" rx="5" fill="#FF0033"/><path d="M11 6.1 19 10l-8 3.9z" fill="#fff"/></svg>
+      </span>
+      <span class="platform logo-only" aria-label="Instagram" title="Instagram">
+        <svg class="brand-logo instagram-logo" viewBox="0 0 28 28" role="img" aria-label="Instagram logo"><defs><linearGradient id="igGradient" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFDC80"/><stop offset=".35" stop-color="#F77737"/><stop offset=".68" stop-color="#E1306C"/><stop offset="1" stop-color="#833AB4"/></linearGradient></defs><rect x="2" y="2" width="24" height="24" rx="7" fill="none" stroke="url(#igGradient)" stroke-width="3"/><circle cx="14" cy="14" r="5.3" fill="none" stroke="url(#igGradient)" stroke-width="2.6"/><circle cx="21" cy="7.5" r="1.7" fill="#E1306C"/></svg>
+      </span>
+      <span class="platform logo-only" aria-label="TikTok" title="TikTok">
+        <svg class="brand-logo tiktok-logo" viewBox="0 0 28 28" role="img" aria-label="TikTok logo"><path d="M16.2 3h4.1c.3 3 2 5.1 4.7 6v4.2a13 13 0 0 1-4.7-1.7v7.2c0 4.1-2.9 6.8-7.1 6.8-4 0-7-2.7-7-6.5 0-4.3 3.5-7 7.8-6.6v4.3c-2.1-.6-3.6.4-3.6 2.2 0 1.3 1.1 2.3 2.7 2.3 1.8 0 3.1-1.1 3.1-3.5z" fill="#25F4EE" transform="translate(-1 -1)"/><path d="M15 2h4.1c.3 3 2 5.1 4.7 6v4.2a13 13 0 0 1-4.7-1.7v7.2c0 4.1-2.9 6.8-7.1 6.8-4 0-7-2.7-7-6.5 0-4.3 3.5-7 7.8-6.6v4.3c-2.1-.6-3.6.4-3.6 2.2 0 1.3 1.1 2.3 2.7 2.3 1.8 0 3.1-1.1 3.1-3.5z" fill="#FE2C55" transform="translate(1 0)"/><path d="M15.6 2H19c.3 3 2 5.1 4.7 6v3.5a12 12 0 0 1-4.7-1.7v7.5c0 3.7-2.5 6.1-6.2 6.1-3.5 0-6-2.4-6-5.8 0-3.7 3-6.1 6.7-5.8V17c-1.7-.4-3 .4-3 2 0 1.1.9 1.9 2.2 1.9 1.5 0 2.5-.9 2.5-2.9z" fill="#111"/></svg>
+      </span>
+    </div>
+  </section>
+
+  <section class="panel-wrap" id="downloader">
+    <div class="panel">
+      <div class="panel-head"><div class="panel-title">✨ &nbsp;Paste your video link</div><div class="safe">LINK CHECK</div></div>
+      <form id="downloadForm">
+        <div class="form-row">
+          <div class="inputbox"><span>↗</span><input id="videoUrl" type="url" placeholder="Paste a video URL here..." aria-label="Video URL" required></div>
+          <button class="paste" id="pasteBtn" type="button">PASTE</button>
+        </div>
+        <button class="submit" type="submit">✦ &nbsp; Find video options &nbsp; →</button>
+      </form>
+      <div id="status" role="status" aria-live="polite"></div>
+      <div class="minirow"><span>🔒 No account needed for this demo</span><span>Designed for every screen</span></div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="section-heading"><h2>Small details. Better experience.</h2><p>Everything has a place, so you can focus on what matters.</p></div>
+    <div class="features">
+      <article class="feature"><div class="ficon">⚡</div><div><h3>Quick and simple</h3><p>A clear link field and one main action. Nothing to figure out.</p></div></article>
+      <article class="feature"><div class="ficon">▣</div><div><h3>Looks good everywhere</h3><p>Built to fit your phone, tablet or desktop screen beautifully.</p></div></article>
+      <article class="feature"><div class="ficon">♡</div><div><h3>Creator-friendly</h3><p>Use it with content you own or have permission to save.</p></div></article>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="section-heading"><h2>Three easy steps</h2><p>Paste a public link to check its platform details.</p></div>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><div><strong>Copy a video link</strong><span>Use the Share button on a supported platform.</span></div></div>
+      <div class="step"><div class="num">2</div><div><strong>Paste it into TriDL</strong><span>Check that the link is correct before continuing.</span></div></div>
+      <div class="step"><div class="num">3</div><div><strong>Check the link</strong><span>TriDL checks supported public metadata and points you to permitted download options.</span></div></div>
+    </div>
+  </section>
+  <div class="ad">ADVERTISEMENT <b>Ad space</b></div>
+  <p class="notice">TriDL is an independent project and is not affiliated with YouTube, Instagram or TikTok. TriDL does not bypass platform restrictions or download third-party videos without permission. Only save content you own or have permission to download, and follow the relevant platform terms.</p>
+</main>
+<footer><strong>TriDL</strong><span>·</span><span>Made for creators, with care.</span></footer>
+<script>
+const $=id=>document.getElementById(id),input=$('videoUrl'),status=$('status');
+$('themeBtn').addEventListener('click',()=>{
+  const dark=document.body.classList.toggle('dark');
+  if(dark){
+    document.documentElement.style.setProperty('--bg','#11121c');
+    document.documentElement.style.setProperty('--surface','#202130');
+    document.documentElement.style.setProperty('--ink','#f7f8ff');
+    document.documentElement.style.setProperty('--muted','#a0a5bd');
+    document.documentElement.style.setProperty('--line','#353649');
+    document.body.style.background='#11121c';
+    document.querySelectorAll('.panel,.feature,.step,.platform,.nav a:hover,.theme:hover').forEach(el=>{el.style.backgroundColor='#202130';el.style.borderColor='#353649'});
+    document.querySelectorAll('input').forEach(el=>{el.style.background='#171824';el.style.color='#fff'});
+    $('themeBtn').textContent='☼ Light mode';
+  }else{location.reload()}
+});
+function showStatus(message){status.textContent=message;status.style.display='block'}
+$('pasteBtn').addEventListener('click',async()=>{
+  try{if(!navigator.clipboard?.readText)throw Error('Clipboard access unavailable. Press and hold the input, then tap Paste.');input.value=await navigator.clipboard.readText();showStatus('Link pasted. Tap “Find video options” to continue.')}
+  catch(e){showStatus(e.message||'Could not access clipboard. Press and hold the input, then tap Paste.')}
+});
+$('downloadForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const value=input.value.trim();
+  if(!value){showStatus('Paste a video link first.');return}
+  showStatus('Checking link…');
+  try{
+    const res=await fetch('/.netlify/functions/lookup',{
+      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:value})
+    });
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error||'Could not check this link.');
+    if(data.title){
+      showStatus('Platform: '+data.platform+'\nTitle: '+data.title+'\nOpen the original post to use the platform’s permitted save/download option. TriDL does not bypass restrictions.');
+    } else {
+      showStatus('Platform: '+data.platform+'. We identified the link, but public metadata is unavailable. Open the original post to use its permitted save/download option.');
+    }
+  }catch(err){
+    showStatus(err.message||'Could not reach TriDL backend. Try again in a moment.');
+  }
+});
+</script>
+</body>
+</html>
