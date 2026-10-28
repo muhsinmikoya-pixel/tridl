@@ -1,0 +1,51 @@
+const allowed = [
+  { platform: "YouTube", hosts: ["youtube.com", "youtu.be"], oembed: "https://www.youtube.com/oembed?format=json&url=" },
+  { platform: "TikTok", hosts: ["tiktok.com"], oembed: "https://www.tiktok.com/oembed?url=" },
+  { platform: "Instagram", hosts: ["instagram.com"], oembed: "https://www.instagram.com/api/v1/oembed/?url=" }
+];
+
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }
+  });
+}
+
+export default async (request) => {
+  if (request.method !== "POST") return json({ error: "Use POST." }, 405);
+
+  let body;
+  try { body = await request.json(); } catch { return json({ error: "Send a JSON body containing a URL." }, 400); }
+  let url;
+  try { url = new URL(body.url); } catch { return json({ error: "Paste a valid public video URL." }, 400); }
+  if (url.protocol !== "https:") return json({ error: "Only HTTPS links are accepted." }, 400);
+
+  const entry = allowed.find(item => item.hosts.some(host => url.hostname === host || url.hostname.endsWith("." + host)));
+  if (!entry) return json({ error: "Use a YouTube, TikTok, or Instagram link." }, 400);
+
+  // Avoid treating platform homepages as video links.
+  if (entry.platform === "YouTube" && !url.hostname.endsWith("youtu.be") && !url.pathname.startsWith("/watch") && !url.pathname.startsWith("/shorts/") && !url.pathname.startsWith("/embed/")) {
+    return json({ error: "Paste a specific YouTube video or Short link." }, 400);
+  }
+  if (entry.platform === "TikTok" && !url.pathname.match(/\/(video|@|t)\b|\/t\//)) {
+    return json({ error: "Paste a specific TikTok post link." }, 400);
+  }
+  if (entry.platform === "Instagram" && !url.pathname.match(/\/(p|reel|tv)\//)) {
+    return json({ error: "Paste a specific Instagram post or Reel link." }, 400);
+  }
+
+  try {
+    const response = await fetch(entry.oembed + encodeURIComponent(url.toString()), {
+      headers: { "User-Agent": "TriDL/1.0 (public metadata lookup)" },
+      signal: AbortSignal.timeout(7000)
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return json({ platform: entry.platform, title: typeof data.title === "string" ? data.title.slice(0, 300) : "", author: typeof data.author_name === "string" ? data.author_name.slice(0, 120) : "", originalUrl: url.toString() });
+    }
+    // Some platforms require authentication or restrict public metadata.
+    return json({ platform: entry.platform, title: "", originalUrl: url.toString() });
+  } catch {
+    return json({ platform: entry.platform, title: "", originalUrl: url.toString() });
+  }
+};
